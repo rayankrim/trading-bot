@@ -1,17 +1,27 @@
-# This is a sample Python script.
+# main.py
 
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import os
+import requests
+from dotenv import load_dotenv
 
+# 1️⃣ Charger les variables d'environnement
+load_dotenv()
+API_KEY = os.getenv("MARKETSTACK_API_KEY")
+print("Clé API :", API_KEY)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# 2️⃣ Choisir l'action à récupérer
+symbol = "AAPL"
 
+# 3️⃣ Construire l'URL de l'API
+url = f"http://api.marketstack.com/v1/eod?access_key={API_KEY}&symbols={symbol}"
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# 4️⃣ Envoyer la requête à l'API
+response = requests.get(url)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-
+# 5️⃣ Vérifier si la requête a réussi
+if response.status_code == 200:
+    data = response.json()  # Convertir en JSON
+    print(f"Données récupérées pour {symbol} :")
+    print(data)
+else:
+    print(f"Erreur {response.status_code} lors de la récupération des données")
